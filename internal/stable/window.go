@@ -61,6 +61,9 @@ func (w *Window) Samples() []int64 {
 		return out
 	}
 	start := 0
+	if w.count == w.size {
+		start = w.head
+	}
 	for i := 0; i < w.count; i++ {
 		idx := (start + i) % w.size
 		out[i] = w.buf[idx]
