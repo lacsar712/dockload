@@ -107,7 +107,16 @@ func (p *HookProcessor) Process(raw int64, cal CalibrationView, ts time.Time) Re
 	prev := p.state
 	res := Result{PreviousState: prev}
 
-	netKg, _ := cal.Apply(raw)
+	// Guard: an uncalibrated or out-of-range hook must never reach the
+	// publish path. A zero span or missing calibration surfaces as
+	// ErrNotCalibrated; reject and block the event so downstream billing
+	// never consumes uncalibrated weight.
+	netKg, err := cal.Apply(raw)
+	if err != nil {
+		res.Reject = mapCalibError(err)
+		res.State = p.state
+		return res
+	}
 
 	switch p.state {
 	case StateIdle:

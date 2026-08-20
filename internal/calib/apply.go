@@ -3,13 +3,15 @@ package calib
 import "fmt"
 
 // ApplyForHook loads calibration from store and converts raw counts.
+// An uncalibrated hook (missing or unset span) is reported as ErrNotCalibrated
+// rather than a silent zero so callers can guard downstream publishing.
 func ApplyForHook(store *Store, hookID string, raw int64) (float64, error) {
 	if store == nil {
 		return 0, fmt.Errorf("calibration store is nil")
 	}
 	c, ok := store.Get(hookID)
 	if !ok || !c.IsSet() {
-		return 0, nil
+		return 0, ErrNotCalibrated
 	}
 	return c.Apply(raw)
 }
