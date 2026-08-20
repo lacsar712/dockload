@@ -28,9 +28,6 @@ func (c Calibration) Apply(raw int64) (float64, error) {
 	if c.MaxLoadKg > 0 && net > c.MaxLoadKg {
 		return net, ErrOverRange
 	}
-	if c.MaxLoadKg > 0 && net < -c.MaxLoadKg {
-		return net, ErrOverRange
-	}
 	return net, nil
 }
 
