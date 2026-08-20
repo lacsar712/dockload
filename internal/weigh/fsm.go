@@ -121,8 +121,8 @@ func (p *HookProcessor) Process(raw int64, cal CalibrationView, ts time.Time) Re
 		p.state = StateCollecting
 
 	case StateStable, StatePublished:
-		if last, ok := p.window.Last(); ok {
-			if absFloat(float64(raw)-float64(last)) > p.loadChange {
+		if _, ok := p.window.Last(); ok {
+			if absFloat(netKg) > p.loadChange {
 				p.window.Reset()
 				p.published = false
 				p.state = StateCollecting
