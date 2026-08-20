@@ -25,7 +25,7 @@ func (c Calibration) Apply(raw int64) (float64, error) {
 		return 0, ErrNotCalibrated
 	}
 	net := float64(raw-c.Tare) * c.Span
-	if c.MaxLoadKg > 0 && net > c.MaxLoadKg {
+	if c.MaxLoadKg > 0 && (net > c.MaxLoadKg || net < -c.MaxLoadKg) {
 		return net, ErrOverRange
 	}
 	return net, nil
