@@ -53,7 +53,10 @@ func (h *HTTPPublisher) Publish(ctx context.Context, event *weigh.Event) error {
 		return fmt.Errorf("marshal event: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, h.url, bytes.NewReader(body))
+	// Bind the request to the caller's ctx so that a tally-side cancel
+	// (e.g. 理货取消) interrupts the in-flight POST to the TOS/堆场系统
+	// instead of leaving it dangling on context.Background().
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, h.url, bytes.NewReader(body))
 	if err != nil {
 		return fmt.Errorf("create request: %w", err)
 	}
