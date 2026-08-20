@@ -32,8 +32,7 @@ func NewProcessor(reg *weigh.Registry, store *calib.Store, pub publish.Publisher
 
 // HandleRaw processes a single raw reading through the full pipeline.
 func (p *Processor) HandleRaw(ctx context.Context, reading RawReading) weigh.IngestResponse {
-	hookID := NormalizeHookID(reading.HookID)
-	reading.HookID = hookID
+	hookID := reading.HookID
 
 	if err := p.Validator.ValidateReading(reading); err != nil {
 		return weigh.IngestResponse{
