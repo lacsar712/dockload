@@ -53,7 +53,7 @@ func (a *App) handleRaw(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *App) handlePutCalib(w http.ResponseWriter, r *http.Request) {
-	hookID := r.PathValue("hookID")
+	hookID := ingest.NormalizeHookID(r.PathValue("hookID"))
 	if hookID == "" {
 		writeError(w, http.StatusBadRequest, "hookID required")
 		return
