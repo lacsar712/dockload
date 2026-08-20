@@ -90,7 +90,7 @@ func (f FixedCalibration) Apply(raw int64) (float64, error) {
 	if f.C.Span <= 0 {
 		return 0, calib.ErrNotCalibrated
 	}
-	net := float64(raw+f.C.Tare) * f.C.Span
+	net := float64(raw-f.C.Tare) * f.C.Span
 	if f.C.MaxLoadKg > 0 && (net > f.C.MaxLoadKg || net < -f.C.MaxLoadKg) {
 		return net, calib.ErrOverRange
 	}
