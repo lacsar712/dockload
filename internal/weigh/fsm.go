@@ -121,8 +121,10 @@ func (p *HookProcessor) Process(raw int64, cal CalibrationView, ts time.Time) Re
 		p.state = StateCollecting
 
 	case StateStable, StatePublished:
-		if _, ok := p.window.Last(); ok {
-			if absFloat(netKg) > p.loadChange {
+		// loadChange is a raw-count threshold (see DOCKLOAD_LOAD_CHANGE);
+		// compare the raw delta against it, not netKg which is in kg.
+		if last, ok := p.window.Last(); ok {
+			if absFloat(float64(raw-last)) > p.loadChange {
 				p.window.Reset()
 				p.published = false
 				p.state = StateCollecting
