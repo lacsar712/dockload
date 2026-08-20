@@ -9,7 +9,7 @@ func ApplyForHook(store *Store, hookID string, raw int64) (float64, error) {
 	}
 	c, ok := store.Get(hookID)
 	if !ok || !c.IsSet() {
-		return 0, nil
+		return 0, ErrNotCalibrated
 	}
 	return c.Apply(raw)
 }
