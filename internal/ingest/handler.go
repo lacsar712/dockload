@@ -32,7 +32,12 @@ func NewProcessor(reg *weigh.Registry, store *calib.Store, pub publish.Publisher
 
 // HandleRaw processes a single raw reading through the full pipeline.
 func (p *Processor) HandleRaw(ctx context.Context, reading RawReading) weigh.IngestResponse {
-	hookID := reading.HookID
+	// Normalize before validation and calibration lookup so that a hook ID
+	// differing only in case or surrounding whitespace still matches its
+	// stored calibration. Without this, readings like " h7 " or "h7" fail to
+	// match a calibration stored under "H7" and are treated as uncalibrated.
+	hookID := NormalizeHookID(reading.HookID)
+	reading.HookID = hookID
 
 	if err := p.Validator.ValidateReading(reading); err != nil {
 		return weigh.IngestResponse{
