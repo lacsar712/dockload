@@ -55,12 +55,18 @@ func (w *Window) Full() bool {
 }
 
 // Samples returns a copy of active samples in chronological order.
+// Once the window is full, the oldest sample lives at head (the next slot to be
+// overwritten), so iteration must begin there — otherwise the wrap-around
+// yields a rotated, non-chronological slice.
 func (w *Window) Samples() []int64 {
 	out := make([]int64, w.count)
 	if w.count == 0 {
 		return out
 	}
 	start := 0
+	if w.count == w.size {
+		start = w.head
+	}
 	for i := 0; i < w.count; i++ {
 		idx := (start + i) % w.size
 		out[i] = w.buf[idx]
