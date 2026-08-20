@@ -53,7 +53,7 @@ func (p *Processor) HandleRaw(ctx context.Context, reading RawReading) weigh.Ing
 	}
 
 	if res.Event != nil && p.Publisher != nil {
-		_ = p.Publisher.Publish(ctx, res.Event)
+		_ = p.Publisher.Publish(context.Background(), res.Event)
 	}
 
 	return weigh.NewIngestResponse(res)
