@@ -109,7 +109,7 @@ func (w *Window) StdDev() float64 {
 
 // Stable reports whether window is full and stddev <= eps.
 func (w *Window) Stable() bool {
-	return w.Full() && w.StdDev() <= w.eps
+	return w.Full() && w.StdDev() < w.eps
 }
 
 // Eps returns the stability threshold.

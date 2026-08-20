@@ -62,5 +62,5 @@ func IsStable(values []int64, expectedN int, eps float64) bool {
 	if len(values) != expectedN {
 		return false
 	}
-	return PopulationStdDev(values) <= eps
+	return PopulationStdDev(values) < eps
 }
