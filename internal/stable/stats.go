@@ -18,7 +18,7 @@ func PopulationStdDev(values []int64) float64 {
 		diff := float64(v) - mean
 		sumSq += diff * diff
 	}
-	return math.Sqrt(sumSq / float64(n-1))
+	return math.Sqrt(sumSq / float64(n))
 }
 
 // MeanInt64 returns arithmetic mean of int64 slice.

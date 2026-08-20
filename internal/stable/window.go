@@ -104,7 +104,7 @@ func (w *Window) StdDev() float64 {
 		diff := float64(w.buf[idx]) - mean
 		sumSq += diff * diff
 	}
-	return math.Sqrt(sumSq / float64(w.count-1))
+	return math.Sqrt(sumSq / float64(w.count))
 }
 
 // Stable reports whether window is full and stddev <= eps.
