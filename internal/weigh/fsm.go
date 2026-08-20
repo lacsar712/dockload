@@ -154,7 +154,6 @@ func (p *HookProcessor) Process(raw int64, cal CalibrationView, ts time.Time) Re
 			Timestamp: ts,
 		}
 		res.Event = ev
-		p.published = true
 		p.state = StatePublished
 	}
 
