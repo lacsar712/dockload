@@ -107,12 +107,7 @@ func (p *HookProcessor) Process(raw int64, cal CalibrationView, ts time.Time) Re
 	prev := p.state
 	res := Result{PreviousState: prev}
 
-	netKg, calErr := cal.Apply(raw)
-	if calErr != nil {
-		res.Reject = mapCalibError(calErr)
-		res.State = p.state
-		return res
-	}
+	netKg, _ := cal.Apply(raw)
 
 	switch p.state {
 	case StateIdle:
