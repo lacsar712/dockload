@@ -115,12 +115,12 @@ func (p *HookProcessor) Process(raw int64, cal CalibrationView, ts time.Time) Re
 	}
 
 	switch p.state {
-	case StateIdle, StatePublished:
+	case StateIdle:
 		p.window.Reset()
 		p.published = false
 		p.state = StateCollecting
 
-	case StateStable:
+	case StateStable, StatePublished:
 		if last, ok := p.window.Last(); ok {
 			if absFloat(float64(raw)-float64(last)) > p.loadChange {
 				p.window.Reset()
@@ -137,14 +137,14 @@ func (p *HookProcessor) Process(raw int64, cal CalibrationView, ts time.Time) Re
 		if p.window.Stable() {
 			p.state = StateStable
 		}
-	case StateStable:
+	case StateStable, StatePublished:
 		if !p.window.Stable() {
 			p.state = StateCollecting
 			p.published = false
 		}
 	}
 
-	if p.state == StateStable && p.window.Stable() && !p.published {
+	if (p.state == StateStable || p.state == StatePublished) && p.window.Stable() && !p.published {
 		ev := &Event{
 			HookID:    p.hookID,
 			NetKg:     netKg,
