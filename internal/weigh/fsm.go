@@ -155,6 +155,7 @@ func (p *HookProcessor) Process(raw int64, cal CalibrationView, ts time.Time) Re
 		}
 		res.Event = ev
 		p.state = StatePublished
+		p.published = true
 	}
 
 	if res.Event == nil && res.Reject == RejectNone {
