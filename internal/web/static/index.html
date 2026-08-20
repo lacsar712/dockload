@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>dockload — 吊具称重操作台</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>dockload</h1>
+    <p class="subtitle">集装箱码头吊具称重流 · 操作台</p>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-panel="calib">标定管理</button>
+    <button class="tab" data-panel="weighs">最近称重</button>
+    <button class="tab" data-panel="status">吊具状态</button>
+    <button class="tab" data-panel="simulate">模拟上报</button>
+  </nav>
+
+  <main>
+    <section id="panel-calib" class="panel active">
+      <h2>标定管理</h2>
+      <form id="calib-form" class="form-grid">
+        <label>吊具 ID<input name="hookID" required placeholder="H7"></label>
+        <label>皮重 tare (counts)<input name="tare" type="number" required value="1000"></label>
+        <label>量程 span (kg/count)<input name="span" type="number" step="0.001" required value="0.05"></label>
+        <label>最大载荷 (kg)<input name="maxLoadKg" type="number" required value="45000"></label>
+        <button type="submit">保存标定</button>
+      </form>
+      <div id="calib-msg" class="msg"></div>
+      <table class="data-table" id="calib-table">
+        <thead><tr><th>吊具</th><th>tare</th><th>span</th><th>maxLoadKg</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="panel-weighs" class="panel">
+      <h2>最近称重事件</h2>
+      <table class="data-table" id="weighs-table">
+        <thead><tr><th>时间</th><th>吊具</th><th>净重 (kg)</th><th>原始计数</th><th>σ</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="panel-status" class="panel">
+      <h2>吊具实时状态</h2>
+      <table class="data-table" id="status-table">
+        <thead><tr><th>吊具</th><th>状态</th><th>稳定</th><th>均值</th><th>标准差</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="panel-simulate" class="panel">
+      <h2>模拟传感器上报</h2>
+      <form id="raw-form" class="form-grid">
+        <label>吊具 ID<input name="hookID" required value="H7"></label>
+        <label>原始计数<input name="rawCounts" type="number" required value="1500"></label>
+        <button type="submit">上报</button>
+      </form>
+      <pre id="raw-result" class="result"></pre>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>dockload v1.0</span>
+    <span id="health-indicator">●</span>
+  </footer>
+  <script src="/app.js"></script>
+</body>
+</html>
